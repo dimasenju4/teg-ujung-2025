@@ -7,8 +7,8 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #004aad; /* Biru PLN cerah */
-      color: #ffcc00; /* Kuning PLN */
+      background-color: #004aad;
+      color: #ffcc00;
       padding: 30px 20px;
       margin: 0;
     }
@@ -39,7 +39,6 @@
       border: 2px solid #ffcc00;
       background-color: #e6f0ff;
       color: #004aad;
-      transition: border-color 0.3s;
     }
     input:focus {
       outline: none;
@@ -53,7 +52,6 @@
       cursor: pointer;
       margin-top: 30px;
       box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-      transition: background-color 0.3s;
     }
     button:hover:not(:disabled) {
       background-color: #e6b800;
@@ -148,7 +146,7 @@
       status.textContent = 'Mengirim data...';
 
       try {
-        const URL = https://script.google.com/macros/s/AKfycbyPwabyxe4EHyIG6rrjf8sVj_9K-p0rnq9EvRDaskhjtlcFl3MkraY3xmfS267CUFcn/exec; // Ganti dengan URL Apps Script kamu
+        const URL = 'https://script.google.com/macros/s/AKfycbyPwabyxe4EHyIG6rrjf8sVj_9K-p0rnq9EvRDaskhjtlcFl3MkraY3xmfS267CUFcn/exec';
 
         const response = await fetch(URL, {
           method: 'POST',

@@ -1,34 +1,106 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <title>Rekap Tegangan Trafo</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rekap Tegangan Trafo - PLN</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #003399; color: white; }
-    label { display: block; margin-top: 10px; }
-    input, button { font-size: 1rem; padding: 8px; margin-top: 5px; width: 100%; }
-    button { background: #ffcc00; border: none; color: #003399; font-weight: bold; cursor: pointer; }
-    button:disabled { background: #aaa; cursor: not-allowed; }
-    #preview { margin-top: 15px; max-width: 100%; border: 2px solid #ffcc00; }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #004aad; /* Biru PLN cerah */
+      color: #ffcc00; /* Kuning PLN */
+      padding: 30px 20px;
+      margin: 0;
+    }
+    h1 {
+      font-size: 2.8rem;
+      text-align: center;
+      margin-bottom: 30px;
+      text-shadow: 1px 1px 2px #002d72;
+    }
+    label {
+      display: block;
+      margin-top: 20px;
+      font-size: 1.6rem;
+      font-weight: bold;
+      text-shadow: 1px 1px 1px #002d72;
+    }
+    input, button {
+      width: 100%;
+      padding: 14px 10px;
+      font-size: 1.4rem;
+      margin-top: 8px;
+      border-radius: 6px;
+      border: none;
+      box-sizing: border-box;
+      font-weight: 600;
+    }
+    input {
+      border: 2px solid #ffcc00;
+      background-color: #e6f0ff;
+      color: #004aad;
+      transition: border-color 0.3s;
+    }
+    input:focus {
+      outline: none;
+      border-color: #ffd500;
+      background-color: #fffacd;
+    }
+    button {
+      background-color: #ffcc00;
+      color: #004aad;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 30px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+      transition: background-color 0.3s;
+    }
+    button:hover:not(:disabled) {
+      background-color: #e6b800;
+    }
+    button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    #preview {
+      display: block;
+      margin-top: 25px;
+      max-width: 100%;
+      max-height: 300px;
+      border: 3px solid #ffcc00;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #ffd500;
+      object-fit: contain;
+    }
+    #status {
+      margin-top: 25px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-align: center;
+      text-shadow: 1px 1px 1px #002d72;
+      min-height: 1.8em;
+    }
   </style>
 </head>
 <body>
-  <h1>Rekap Tegangan Trafo</h1>
+  <h1>Rekap Tegangan Trafo - PLN</h1>
   <form id="form">
-    <label>Kode Gardu:
-      <input type="text" id="kodeGardu" required>
-    </label>
-    <label>Kode Tiang:
-      <input type="text" id="kodeTiang" required>
-    </label>
-    <label>Tegangan (Volt):
-      <input type="number" step="0.1" id="tegangan" required>
-    </label>
-    <label>Foto:
-      <input type="file" accept="image/*" capture="environment" id="fotoInput" required>
-    </label>
+    <label for="kodeGardu">Kode Gardu:</label>
+    <input type="text" id="kodeGardu" name="kodeGardu" required autocomplete="off" />
+
+    <label for="kodeTiang">Kode Tiang:</label>
+    <input type="text" id="kodeTiang" name="kodeTiang" required autocomplete="off" />
+
+    <label for="tegangan">Tegangan (Volt):</label>
+    <input type="number" step="0.1" id="tegangan" name="tegangan" required />
+
+    <label for="fotoInput">Foto:</label>
+    <input type="file" id="fotoInput" name="fotoInput" accept="image/*" capture="environment" required />
     <img id="preview" alt="Preview Foto" />
+
     <button type="submit">Kirim Data</button>
   </form>
+
   <p id="status"></p>
 
 <script>
@@ -50,33 +122,42 @@
 
   form.addEventListener('submit', async e => {
     e.preventDefault();
+
     if (!fotoBase64) {
       status.textContent = 'Foto harus diambil dulu.';
       return;
     }
+
     status.textContent = 'Mendapatkan lokasi GPS...';
+
+    if (!navigator.geolocation) {
+      status.textContent = 'Geolocation tidak didukung oleh browser ini.';
+      return;
+    }
+
     navigator.geolocation.getCurrentPosition(async pos => {
       const data = {
-        kodeGardu: document.getElementById('kodeGardu').value,
-        kodeTiang: document.getElementById('kodeTiang').value,
-        tegangan: document.getElementById('tegangan').value,
+        kodeGardu: form.kodeGardu.value.trim(),
+        kodeTiang: form.kodeTiang.value.trim(),
+        tegangan: form.tegangan.value,
         photoBase64: fotoBase64,
         lat: pos.coords.latitude,
-        lng: pos.coords.longitude,
+        lng: pos.coords.longitude
       };
 
       status.textContent = 'Mengirim data...';
 
       try {
-        // Ganti URL berikut dengan URL Apps Script milikmu:
-        const URL = 'https://script.google.com/macros/s/AKfycbyzqt5W0UeVZfFVLyYfdDtshd09D6X0maLNlLUS_GFM7kXxVhTrfsu0OFQpdmiGXiCv/exec';
+        const URL = 'https://script.google.com/macros/s/AKfycbyzqt5W0UeVZfFVLyYfdDtshd09D6X0maLNlLUS_GFM7kXxVhTrfsu0OFQpdmiGXiCv/exec'; // Ganti dengan URL Apps Script kamu
 
         const response = await fetch(URL, {
           method: 'POST',
           body: JSON.stringify(data),
-          headers: {'Content-Type': 'application/json'}
+          headers: { 'Content-Type': 'application/json' }
         });
+
         const text = await response.text();
+
         if (text === 'OK') {
           status.textContent = 'Data berhasil dikirim!';
           form.reset();
@@ -85,11 +166,15 @@
         } else {
           status.textContent = 'Gagal mengirim data: ' + text;
         }
-      } catch(err) {
+      } catch (err) {
         status.textContent = 'Error: ' + err.message;
       }
     }, err => {
       status.textContent = 'Gagal mendapatkan lokasi GPS: ' + err.message;
+    }, {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0
     });
   });
 </script>

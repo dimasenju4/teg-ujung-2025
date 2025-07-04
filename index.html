@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Rekap Tegangan Trafo</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #003399; color: white; }
+    label { display: block; margin-top: 10px; }
+    input, button { font-size: 1rem; padding: 8px; margin-top: 5px; width: 100%; }
+    button { background: #ffcc00; border: none; color: #003399; font-weight: bold; cursor: pointer; }
+    button:disabled { background: #aaa; cursor: not-allowed; }
+    #preview { margin-top: 15px; max-width: 100%; border: 2px solid #ffcc00; }
+  </style>
+</head>
+<body>
+  <h1>Rekap Tegangan Trafo</h1>
+  <form id="form">
+    <label>Kode Gardu:
+      <input type="text" id="kodeGardu" required>
+    </label>
+    <label>Kode Tiang:
+      <input type="text" id="kodeTiang" required>
+    </label>
+    <label>Tegangan (Volt):
+      <input type="number" step="0.1" id="tegangan" required>
+    </label>
+    <label>Foto:
+      <input type="file" accept="image/*" capture="environment" id="fotoInput" required>
+    </label>
+    <img id="preview" alt="Preview Foto" />
+    <button type="submit">Kirim Data</button>
+  </form>
+  <p id="status"></p>
+
+<script>
+  const form = document.getElementById('form');
+  const preview = document.getElementById('preview');
+  const status = document.getElementById('status');
+  let fotoBase64 = '';
+
+  document.getElementById('fotoInput').addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      fotoBase64 = reader.result.split(',')[1];
+      preview.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    if (!fotoBase64) {
+      status.textContent = 'Foto harus diambil dulu.';
+      return;
+    }
+    status.textContent = 'Mendapatkan lokasi GPS...';
+    navigator.geolocation.getCurrentPosition(async pos => {
+      const data = {
+        kodeGardu: document.getElementById('kodeGardu').value,
+        kodeTiang: document.getElementById('kodeTiang').value,
+        tegangan: document.getElementById('tegangan').value,
+        photoBase64: fotoBase64,
+        lat: pos.coords.latitude,
+        lng: pos.coords.longitude,
+      };
+
+      status.textContent = 'Mengirim data...';
+
+      try {
+        // Ganti URL berikut dengan URL Apps Script milikmu:
+        const URL = 'https://script.google.com/macros/s/AKfycbzqgMlt1Lf5mBsOQM-CBvHgLQSENKtf-brK02M7W1r5GX54KzU3ueye9FlApgEic-u5/exec';
+
+        const response = await fetch(URL, {
+          method: 'POST',
+          body: JSON.stringify(data),
+          headers: {'Content-Type': 'application/json'}
+        });
+        const text = await response.text();
+        if (text === 'OK') {
+          status.textContent = 'Data berhasil dikirim!';
+          form.reset();
+          preview.src = '';
+          fotoBase64 = '';
+        } else {
+          status.textContent = 'Gagal mengirim data: ' + text;
+        }
+      } catch(err) {
+        status.textContent = 'Error: ' + err.message;
+      }
+    }, err => {
+      status.textContent = 'Gagal mendapatkan lokasi GPS: ' + err.message;
+    });
+  });
+</script>
+</body>
+</html>

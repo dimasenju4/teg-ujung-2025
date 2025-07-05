@@ -1,166 +1,166 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Rekap Tegangan Trafo - PLN</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #004aad;
-    color: #ffcc00;
-    padding: 30px 20px;
-    margin: 0;
-  }
-  h1 {
-    font-size: 2.8rem;
-    text-align: center;
-    margin-bottom: 30px;
-    text-shadow: 1px 1px 2px #002d72;
-  }
-  label {
-    display: block;
-    margin-top: 20px;
-    font-size: 1.6rem;
-    font-weight: bold;
-    text-shadow: 1px 1px 1px #002d72;
-  }
-  input, button {
-    width: 100%;
-    padding: 14px 10px;
-    font-size: 1.4rem;
-    margin-top: 8px;
-    border-radius: 6px;
-    border: none;
-    box-sizing: border-box;
-    font-weight: 600;
-  }
-  input {
-    border: 2px solid #ffcc00;
-    background-color: #e6f0ff;
-    color: #004aad;
-  }
-  input:focus {
-    outline: none;
-    border-color: #ffd500;
-    background-color: #fffacd;
-  }
-  button {
-    background-color: #ffcc00;
-    color: #004aad;
-    font-weight: 700;
-    cursor: pointer;
-    margin-top: 30px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-  }
-  button:hover:not(:disabled) {
-    background-color: #e6b800;
-  }
-  button:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-  }
-  #preview {
-    display: block;
-    margin-top: 25px;
-    max-width: 100%;
-    max-height: 300px;
-    border: 3px solid #ffcc00;
-    border-radius: 8px;
-    box-shadow: 0 0 10px #ffd500;
-    object-fit: contain;
-  }
-  #status {
-    margin-top: 25px;
-    font-size: 1.5rem;
-    font-weight: 700;
-    text-align: center;
-    text-shadow: 1px 1px 1px #002d72;
-    min-height: 1.8em;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rekap Tegangan Trafo - PLN</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #004aad;
+      color: #ffcc00;
+      padding: 30px 20px;
+      margin: 0;
+    }
+    h1 {
+      font-size: 2.8rem;
+      text-align: center;
+      margin-bottom: 30px;
+      text-shadow: 1px 1px 2px #002d72;
+    }
+    label {
+      display: block;
+      margin-top: 20px;
+      font-size: 1.6rem;
+      font-weight: bold;
+      text-shadow: 1px 1px 1px #002d72;
+    }
+    input, button {
+      width: 100%;
+      padding: 14px 10px;
+      font-size: 1.4rem;
+      margin-top: 8px;
+      border-radius: 6px;
+      border: none;
+      box-sizing: border-box;
+      font-weight: 600;
+    }
+    input {
+      border: 2px solid #ffcc00;
+      background-color: #e6f0ff;
+      color: #004aad;
+    }
+    input:focus {
+      outline: none;
+      border-color: #ffd500;
+      background-color: #fffacd;
+    }
+    button {
+      background-color: #ffcc00;
+      color: #004aad;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 30px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    }
+    button:hover:not(:disabled) {
+      background-color: #e6b800;
+    }
+    button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    #preview {
+      display: block;
+      margin-top: 25px;
+      max-width: 100%;
+      max-height: 300px;
+      border: 3px solid #ffcc00;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #ffd500;
+      object-fit: contain;
+    }
+    #status {
+      margin-top: 25px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-align: center;
+      text-shadow: 1px 1px 1px #002d72;
+      min-height: 1.8em;
+    }
+  </style>
 </head>
 <body>
-<h1>Rekap Tegangan Trafo - PLN</h1>
-<form id="form">
-  <label for="kodeGardu">Kode Gardu:</label>
-  <input type="text" id="kodeGardu" name="kodeGardu" required autocomplete="off" />
+  <h1>Rekap Tegangan Trafo - PLN</h1>
+  <form id="form">
+    <label for="kodeGardu">Kode Gardu:</label>
+    <input type="text" id="kodeGardu" name="kodeGardu" required autocomplete="off" />
 
-  <label for="kodeTiang">Kode Tiang:</label>
-  <input type="text" id="kodeTiang" name="kodeTiang" required autocomplete="off" />
+    <label for="kodeTiang">Kode Tiang:</label>
+    <input type="text" id="kodeTiang" name="kodeTiang" required autocomplete="off" />
 
-  <label for="tegangan">Tegangan Terukur (Volt):</label>
-  <input type="number" step="0.1" id="tegangan" name="tegangan" required />
+    <label for="tegangan">Tegangan Terukur (Volt):</label>
+    <input type="number" step="0.1" id="tegangan" name="tegangan" required />
 
-  <label for="fotoInput">Foto:</label>
-  <input type="file" id="fotoInput" name="fotoInput" accept="image/*" capture="environment" required />
-  <img id="preview" alt="Preview Foto" />
+    <label for="fotoInput">Foto:</label>
+    <input type="file" id="fotoInput" name="fotoInput" accept="image/*" capture="environment" required />
+    <img id="preview" alt="Preview Foto" />
 
-  <button type="submit">Kirim Data</button>
-</form>
+    <button type="submit">Kirim Data</button>
+  </form>
 
-<p id="status"></p>
+  <p id="status"></p>
 
-<script>
-  const form = document.getElementById('form');
-  const preview = document.getElementById('preview');
-  const status = document.getElementById('status');
-  let fotoBase64 = '';
+  <script>
+    const form = document.getElementById('form');
+    const preview = document.getElementById('preview');
+    const status = document.getElementById('status');
+    let fotoBase64 = '';
 
-  document.getElementById('fotoInput').addEventListener('change', e => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      fotoBase64 = reader.result.split(',')[1];
-      preview.src = reader.result;
-    };
-    reader.readAsDataURL(file);
-  });
+    document.getElementById('fotoInput').addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        fotoBase64 = reader.result.split(',')[1];
+        preview.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
 
-  form.addEventListener('submit', async e => {
-    e.preventDefault();
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
 
-    if (!fotoBase64) {
-      status.textContent = 'Foto harus diambil dulu.';
-      return;
-    }
-
-    status.textContent = 'Mengirim data...';
-
-    const data = {
-      kodeGardu: form.kodeGardu.value.trim(),
-      kodeTiang: form.kodeTiang.value.trim(),
-      tegangan: form.tegangan.value,
-      photoBase64: fotoBase64,
-      tanggal: new Date().toISOString()
-    };
-
-    try {
-      const URL = 'https://script.google.com/macros/s/AKfycbyPwabyxe4EHyIG6rrjf8sVj_9K-p0rnq9EvRDaskhjtlcFl3MkraY3xmfS267CUFcn/exec';
-
-      const response = await fetch(URL, {
-        method: 'POST',
-        mode: 'cors',
-        cache: 'no-cache',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-
-      const text = await response.text();
-
-      if (text === 'OK') {
-        status.textContent = 'Data berhasil dikirim!';
-        form.reset();
-        preview.src = '';
-        fotoBase64 = '';
-      } else {
-        status.textContent = 'Gagal mengirim data: ' + text;
+      if (!fotoBase64) {
+        status.textContent = 'Foto harus diambil dulu.';
+        return;
       }
-    } catch (err) {
-      status.textContent = 'Error: ' + err.message;
-    }
-  });
-</script>
+
+      status.textContent = 'Mengirim data...';
+
+      const data = {
+        kodeGardu: form.kodeGardu.value.trim(),
+        kodeTiang: form.kodeTiang.value.trim(),
+        tegangan: form.tegangan.value,
+        photoBase64: fotoBase64,
+        tanggal: new Date().toISOString()
+      };
+
+      try {
+        const URL = 'https://script.google.com/macros/s/AKfycbyPwabyxe4EHyIG6rrjf8sVj_9K-p0rnq9EvRDaskhjtlcFl3MkraY3xmfS267CUFcn/exec';
+
+        const response = await fetch(URL, {
+          method: 'POST',
+          mode: 'cors',
+          cache: 'no-cache',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        const text = await response.text();
+
+        if (text === 'OK') {
+          status.textContent = 'Data berhasil dikirim!';
+          form.reset();
+          preview.src = '';
+          fotoBase64 = '';
+        } else {
+          status.textContent = 'Gagal mengirim data: ' + text;
+        }
+      } catch (err) {
+        status.textContent = 'Error: ' + err.message;
+      }
+    });
+  </script>
 </body>
 </html>
